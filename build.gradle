@@ -14,6 +14,7 @@ buildscript {
 }
 
 apply plugin: 'kotlin'
+apply plugin: 'application'
 
 repositories {
   mavenCentral()
@@ -23,10 +24,7 @@ dependencies {
   compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 
-task run(type: JavaExec) {
-  main = 'au.com.subash.calculator.AppKt'
-  classpath = sourceSets.main.runtimeClasspath
-}
+mainClassName = 'au.com.subash.calculator.AppKt'
 
 compileKotlin {
   kotlinOptions.jvmTarget = "1.8"
