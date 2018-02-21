@@ -1,33 +1,22 @@
 package au.com.subash.calculator
 
-class Calculator : Runnable {
+class Calculator {
 
     private val QUIT = "quit"
     private val CLEAR = "clear"
 
-    private var running : Boolean = false;
-    private var count : Int = 0;
-
-    /**
-     * Run the calculator application
-     */
-    override fun run() {
-        running = true
-
-        while(running) {
-            println("running..")
-            count++
-
-            if (count >= 10) {
-                stop()
-            }
+    fun evaluate(input : String) {
+        if (input == QUIT) {
+            quit()
         }
+
+        println(input)
     }
 
     /**
      * Stop the calculator application
      */
-    private fun stop() {
-        running = false
+    private fun quit() {
+        System.exit(0)
     }
 }
