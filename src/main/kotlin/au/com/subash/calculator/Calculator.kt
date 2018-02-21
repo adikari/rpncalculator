@@ -1,14 +1,21 @@
 package au.com.subash.calculator
 
-import java.util.*
+import java.util.HashMap
+import java.util.Stack
 import java.util.Arrays.asList
 
 class Calculator {
 
-    private val operator = asList("+", "-", "*", "/", "sqrt")
-    private val commands = asList("undo", "clear")
+    private val operations : HashMap<String, Operation> = hashMapOf(
+            "+" to AddOperation(),
+            "-" to SubstractOperation(),
+            "*" to SubstractOperation(),
+            "/" to SubstractOperation(),
+            "sqrt" to SubstractOperation(),
+            "undo" to SubstractOperation(),
+            "clear" to SubstractOperation()
+    )
 
-    private val operations : Map<Char, Operation> = HashMap()
     private val stack = Stack<Double>()
 
     fun evaluate(input : String) {
@@ -18,15 +25,13 @@ class Calculator {
             when {
                 isOperator(it) -> {
                     try {
-                        val result : Double = calculate(it.single())
+                        val result : Double = calculate(it)
                         stack.push(result)
                     } catch (e : Exception) {
                         println(e.message)
                     }
                 }
-                isCommand(it) -> {
 
-                }
                 else -> stack.push(it.toDouble())
             }
         }
@@ -39,7 +44,7 @@ class Calculator {
      *
      * @return Calculated value
      */
-    private fun calculate(operator : Char) : Double {
+    private fun calculate(operator : String) : Double {
 
         if (stack.size < 2) {
             // TODO: throw NotEnoughOperandException
@@ -56,10 +61,6 @@ class Calculator {
     }
 
     private fun isOperator(input : String) : Boolean {
-        return operator.contains(input)
-    }
-
-    private fun isCommand(input : String) : Boolean {
-        return commands.contains(input)
+        return operations.containsKey(input)
     }
 }
