@@ -1,5 +1,6 @@
 package au.com.subash.calculator
 
+import au.com.subash.calculator.exception.InvalidOperationException
 import java.util.Stack
 
 class Calculator {
@@ -25,12 +26,29 @@ class Calculator {
     private fun processOperator(operator : String) {
 
         if (operandStack.isEmpty()) {
-            // TODO: throw stack empty exception
-            throw Exception("No operands to operate on")
+            throw InvalidOperationException("No operands to operate on")
         }
 
-        // TODO: throw No such operator exception
-        // val operation = operations[operator] ?: throw Exception("No such operator")
+        val operation = Operation.getOperator(operator)
 
+        when (operation) {
+            Operation.UNDO -> performUndoOperation()
+            Operation.CLEAR -> performClearOperation()
+            else -> performOperation(operation)
+        }
     }
+
+    private fun performOperation(operation : Operation) {
+        val firstOperand = operandStack.pop()
+        val secondOperand = if (operation.requiredOperand > 1) operandStack.pop() else 0.0
+
+        val result = operation.operate(firstOperand, secondOperand)
+        operandStack.push(result)
+    }
+
+    private fun performUndoOperation() {
+        TODO("Implement later")
+    }
+
+    private fun performClearOperation() = operandStack.clear()
 }

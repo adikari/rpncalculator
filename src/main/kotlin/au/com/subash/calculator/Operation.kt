@@ -1,22 +1,22 @@
-package au.com.subash.calculator.operation
+package au.com.subash.calculator
 
-import au.com.subash.calculator.InvalidOperationException
+import au.com.subash.calculator.exception.InvalidOperationException
 import java.util.HashMap
 import kotlin.math.sqrt
 
-enum class Operator(private val symbol : String) {
+enum class Operation(private val symbol : String, val requiredOperand : Int) {
 
-    ADD("+") {
+    ADD("+", 2) {
         override fun operate(firstOperand: Double, secondOperand: Double): Double
                 = secondOperand + firstOperand
     },
 
-    SUBTRACT("-") {
+    SUBTRACT("-", 2) {
         override fun operate(firstOperand: Double, secondOperand: Double): Double
                 = secondOperand - firstOperand
     },
 
-    DIVIDE("/") {
+    DIVIDE("/", 2) {
         override fun operate(firstOperand: Double, secondOperand: Double): Double {
             if (firstOperand == 0.0) {
                 throw InvalidOperationException("Cannot divide operand by 0")
@@ -26,29 +26,36 @@ enum class Operator(private val symbol : String) {
         }
     },
 
-    MULTIPLY("*") {
+    MULTIPLY("*", 2) {
         override fun operate(firstOperand: Double, secondOperand: Double): Double =
                 secondOperand * firstOperand
     },
 
-    SQUARE_ROOT("sqrt") {
-        override fun operate(firstOperand: Double, secondOperand: Double): Double = sqrt(firstOperand)
+    SQUARE_ROOT("sqrt", 1) {
+        override fun operate(firstOperand: Double, secondOperand: Double): Double =
+                sqrt(firstOperand)
     },
 
-    UNDO("undo") {
+    UNDO("undo", 0) {
         override fun operate(firstOperand: Double, secondOperand: Double): Double =
                 throw InvalidOperationException()
     },
 
-    CLEAR("clear") {
+    CLEAR("clear", 0) {
         override fun operate(firstOperand: Double, secondOperand: Double): Double =
                 throw InvalidOperationException()
     };
 
-    private val operators = HashMap<String, Operator>()
+    companion object {
+        private val operators = HashMap<String, Operation>()
 
-    init {
-        values().forEach { operators[it.symbol] = it }
+        fun getOperator(symbol : String) : Operation =
+            operators[symbol] ?: throw InvalidOperationException("Invalid operator")
+
+        init {
+            values().forEach { operators[it.symbol] = it }
+        }
+
     }
 
     abstract fun operate(firstOperand: Double, secondOperand: Double): Double
