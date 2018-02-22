@@ -18,6 +18,8 @@ fun main(args: Array<String>) {
         }
 
         calculator.evaluate(input)
+
+        println(calculator.operandStack.peek().toString())
     }
 }
 

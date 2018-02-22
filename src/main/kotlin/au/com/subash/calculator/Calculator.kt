@@ -5,10 +5,11 @@ import java.util.Stack
 
 class Calculator {
 
-    private val operandStack = Stack<Double>()
+    var operandStack = Stack<Double>()
+        private set
 
     fun evaluate(input : String) {
-        val split = input.split("\\s")
+        val split = input.split(" ")
 
         split.forEach { parseInput(it) }
     }
@@ -16,11 +17,7 @@ class Calculator {
     private fun parseInput(input : String) {
         val operand = input.toDoubleOrNull()
 
-        if (null == operand) {
-            processOperator(input)
-        } else {
-           operandStack.push(operand)
-        }
+        if (null == operand) processOperator(input) else operandStack.push(operand)
     }
 
     private fun processOperator(operator : String) {
