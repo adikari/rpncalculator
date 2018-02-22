@@ -19,7 +19,7 @@ enum class Operation(private val symbol : String, val requiredOperand : Int) {
     DIVIDE("/", 2) {
         override fun operate(firstOperand: Double, secondOperand: Double): Double {
             if (firstOperand == 0.0) {
-                throw InvalidOperationException("Cannot divide operand by 0")
+                throw InvalidOperationException("Cannot divide operand by 0!!")
             }
 
             return secondOperand / firstOperand
@@ -38,19 +38,19 @@ enum class Operation(private val symbol : String, val requiredOperand : Int) {
 
     UNDO("undo", 0) {
         override fun operate(firstOperand: Double, secondOperand: Double): Double =
-                throw InvalidOperationException()
+                throw InvalidOperationException("Undo operation cannot be performed directly")
     },
 
     CLEAR("clear", 0) {
         override fun operate(firstOperand: Double, secondOperand: Double): Double =
-                throw InvalidOperationException()
+                throw InvalidOperationException("Clear operation cannot be performed directly")
     };
 
     companion object {
         private val operators = HashMap<String, Operation>()
 
         fun getOperator(symbol : String) : Operation =
-            operators[symbol] ?: throw InvalidOperationException("Invalid operator")
+            operators[symbol] ?: throw InvalidOperationException("Invalid operator!!")
 
         init {
             values().forEach { operators[it.symbol] = it }
