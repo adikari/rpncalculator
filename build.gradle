@@ -24,6 +24,10 @@ dependencies {
   compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 
+run {
+  standardInput = System.in
+}
+
 mainClassName = 'au.com.subash.calculator.AppKt'
 
 compileKotlin {

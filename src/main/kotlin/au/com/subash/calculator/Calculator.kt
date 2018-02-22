@@ -1,66 +1,36 @@
 package au.com.subash.calculator
 
-import java.util.HashMap
 import java.util.Stack
-import java.util.Arrays.asList
 
 class Calculator {
 
-    private val operations : HashMap<String, Operation> = hashMapOf(
-            "+" to AddOperation(),
-            "-" to SubstractOperation(),
-            "*" to SubstractOperation(),
-            "/" to SubstractOperation(),
-            "sqrt" to SubstractOperation(),
-            "undo" to SubstractOperation(),
-            "clear" to SubstractOperation()
-    )
-
-    private val stack = Stack<Double>()
+    private val operandStack = Stack<Double>()
 
     fun evaluate(input : String) {
-        val chars = input.split(" ")
+        val split = input.split("\\s")
 
-        chars.forEach {
-            when {
-                isOperator(it) -> {
-                    try {
-                        val result : Double = calculate(it)
-                        stack.push(result)
-                    } catch (e : Exception) {
-                        println(e.message)
-                    }
-                }
+        split.forEach { parseInput(it) }
+    }
 
-                else -> stack.push(it.toDouble())
-            }
+    private fun parseInput(input : String) {
+        val operand = input.toDoubleOrNull()
+
+        if (null == operand) {
+            processOperator(input)
+        } else {
+           operandStack.push(operand)
         }
     }
 
-    /**
-     * Perform calculation on top 2 items on stack with given operator
-     *
-     * @param operator Operator to perform calculation with
-     *
-     * @return Calculated value
-     */
-    private fun calculate(operator : String) : Double {
+    private fun processOperator(operator : String) {
 
-        if (stack.size < 2) {
-            // TODO: throw NotEnoughOperandException
-            throw Exception("Not enough operators to perform calculation.")
+        if (operandStack.isEmpty()) {
+            // TODO: throw stack empty exception
+            throw Exception("No operands to operate on")
         }
 
-        // TODO: throw UnknownOperationException
-        val operation : Operation = operations[operator] ?: throw Exception("Unrecognized operation")
+        // TODO: throw No such operator exception
+        // val operation = operations[operator] ?: throw Exception("No such operator")
 
-        val leftOperand : Double = stack.pop()
-        val rightOperand : Double = stack.pop()
-
-        return operation.calculate(leftOperand, rightOperand)
-    }
-
-    private fun isOperator(input : String) : Boolean {
-        return operations.containsKey(input)
     }
 }
