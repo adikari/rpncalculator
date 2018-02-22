@@ -59,8 +59,9 @@ class Calculator {
      */
     private fun performOperation(operation : Operation) {
 
-        if (operandStack.isEmpty()) {
-            throw InvalidOperationException("No operands to operate on!!")
+        if (operandStack.isEmpty() || operandStack.size < operation.requiredOperand) {
+            val msg = "${operation.name} (position: ${operandStack.size}): insufficient parameters"
+            throw InvalidOperationException(msg)
         }
 
         val firstOperand = operandStack.pop()

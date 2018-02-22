@@ -22,7 +22,7 @@ fun main(args: Array<String>) {
 
             println("Stack: " + calculator.operandStack.joinToString(", "))
         } catch (e : Exception) {
-            println("Message: " + e.message)
+            println("Error: " + e.message)
         }
     }
 }
