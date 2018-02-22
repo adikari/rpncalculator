@@ -17,9 +17,14 @@ fun main(args: Array<String>) {
             System.exit(0)
         }
 
-        calculator.evaluate(input)
+        try {
+            calculator.evaluate(input)
 
-        println(calculator.operandStack.peek().toString())
+            println("Result: " + calculator.operandStack.peek()?.toString())
+            println("Stack: " + calculator.operandStack.joinToString(", ") )
+        } catch (e : Exception) {
+            println("Message: " + e.message)
+        }
     }
 }
 
