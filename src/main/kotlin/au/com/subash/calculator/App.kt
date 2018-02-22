@@ -20,8 +20,7 @@ fun main(args: Array<String>) {
         try {
             calculator.evaluate(input)
 
-            println("Result: " + calculator.operandStack.peek()?.toString())
-            println("Stack: " + calculator.operandStack.joinToString(", ") )
+            println("Stack: " + calculator.operandStack.joinToString(", "))
         } catch (e : Exception) {
             println("Message: " + e.message)
         }
