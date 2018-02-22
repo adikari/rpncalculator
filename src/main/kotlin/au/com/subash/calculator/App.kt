@@ -1,6 +1,6 @@
 package au.com.subash.calculator
 
-import java.util.*
+import java.util.Scanner
 
 val scanner = Scanner(System.`in`)
 

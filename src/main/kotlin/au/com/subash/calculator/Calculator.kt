@@ -3,28 +3,45 @@ package au.com.subash.calculator
 import au.com.subash.calculator.exception.InvalidOperationException
 import java.util.Stack
 
+/**
+ * RPN calculator
+ * Perform operation using Reverse Polish Notation
+ */
 class Calculator {
 
+    /**
+     * Stack to store operands
+     */
     var operandStack = Stack<Double>()
         private set
 
+    /**
+     * Stack to restore previous operation
+     */
     private val undoStack = Stack<Double>()
 
+    /**
+     * Evaluate RPN expression
+     *
+     * @param input RPN expression
+     */
     fun evaluate(input : String) {
-        val split = input.split(" ")
+        val expression = input.split(" ")
 
-        split.forEach { parseInput(it) }
+        expression.forEach {
+            val operand = it.toDoubleOrNull()
+
+            if (null == operand) parseSymbol(it) else operandStack.push(operand)
+        }
     }
 
-    private fun parseInput(input : String) {
-        val operand = input.toDoubleOrNull()
-
-        if (null == operand) processOperator(input) else operandStack.push(operand)
-    }
-
-    private fun processOperator(operator : String) {
-
-        val operation = Operation.getOperator(operator)
+    /**
+     * Parse operation symbol and perform operation accordingly
+     *
+     * @param symbol Operation symbol
+     */
+    private fun parseSymbol(symbol: String) {
+        val operation = Operation.getOperator(symbol)
 
         when (operation) {
             Operation.UNDO -> performUndoOperation()
@@ -33,6 +50,13 @@ class Calculator {
         }
     }
 
+    /**
+     * Perform calculate operation
+     *
+     * @param operation Operation to perform
+     *
+     * @throws InvalidOperationException There are not enough operands to perform operation
+     */
     private fun performOperation(operation : Operation) {
 
         if (operandStack.isEmpty()) {
@@ -48,6 +72,11 @@ class Calculator {
         undoStack.push(secondOperand)
     }
 
+    /**
+     * Perform undo operation. Reset operandStack to state before last operation
+     *
+     * @throws InvalidOperationException There is not enough operands for undo operation
+     */
     private fun performUndoOperation() {
         if (undoStack.size < 2) {
             throw InvalidOperationException("Noting to undo!!")
@@ -58,6 +87,9 @@ class Calculator {
         operandStack.push(undoStack.pop())
     }
 
+    /**
+     * Clear both undo and operand stack
+     */
     private fun performClearOperation() {
         operandStack.clear()
         undoStack.clear()
