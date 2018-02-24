@@ -1,4 +1,4 @@
-package au.com.subash.calculator
+package au.com.subash.calculator.operation
 
 import au.com.subash.calculator.exception.InvalidOperationException
 import junit.framework.TestCase.fail
@@ -12,47 +12,8 @@ object OperationSpec : Spek({
 
     given("an operation") {
 
-        on("get operator") {
-            it ("should return add operator") {
-                Operation.getOperator("+") `should equal` Operation.ADD
-            }
-
-            it ("should return subtract operator") {
-                Operation.getOperator("-") `should equal` Operation.SUBTRACT
-            }
-
-            it ("should return division operator") {
-                Operation.getOperator("/") `should equal` Operation.DIVIDE
-            }
-
-            it ("should return multiply operator") {
-                Operation.getOperator("*") `should equal` Operation.MULTIPLY
-            }
-
-            it ("should return square root operator") {
-                Operation.getOperator("sqrt") `should equal` Operation.SQUARE_ROOT
-            }
-
-            it ("should return undo operator") {
-                Operation.getOperator("undo") `should equal` Operation.UNDO
-            }
-
-            it ("should return clear operator") {
-                Operation.getOperator("clear") `should equal` Operation.CLEAR
-            }
-
-            it("should throw InvalidOperationException") {
-                try {
-                    Operation.getOperator(")")
-                    fail("Should throw InvalidOperationException")
-                } catch (e : InvalidOperationException) {
-                    e.message `should equal` "Invalid operator!!"
-                }
-            }
-        }
-
         on("addition") {
-            val operation = Operation.getOperator("+")
+            val operation = OperationFactory.get("+")
 
             it("should return result of adding left operand to right operand") {
                 operation.operate(2.0, 3.0) `should equal` 5.0
@@ -66,7 +27,7 @@ object OperationSpec : Spek({
         }
 
         on("subtraction") {
-            val operation = Operation.getOperator("-")
+            val operation = OperationFactory.get("-")
 
             it("should return result of subtracting first operand from second operand") {
                 operation.operate(1.0, 2.0) `should equal` 1.0
@@ -80,7 +41,7 @@ object OperationSpec : Spek({
         }
 
         on("multiplication") {
-            val operation = Operation.getOperator("*")
+            val operation = OperationFactory.get("*")
 
             it("should return result of multiplying first operand with second operand") {
                 operation.operate(2.0, 3.0) `should equal` 6.0
@@ -94,7 +55,7 @@ object OperationSpec : Spek({
         }
 
         on("division") {
-            val operation = Operation.getOperator("/")
+            val operation = OperationFactory.get("/")
 
             it("should return result of dividing second operand by first operand") {
                 operation.operate(2.0, 4.0) `should equal` 2.0
@@ -116,7 +77,7 @@ object OperationSpec : Spek({
         }
 
         on("square root") {
-            val operation = Operation.getOperator("sqrt")
+            val operation = OperationFactory.get("sqrt")
 
             it("should return result of square root of operand") {
                 operation.operate(2.0, 0.0) `should equal` 1.4142135623730951
@@ -130,38 +91,6 @@ object OperationSpec : Spek({
             it("should return result ignoring second operand") {
                 operation.operate(4.0, 3.0) `should equal` 2.0
                 operation.operate(4.0, 4.0) `should equal` 2.0
-            }
-        }
-
-        on("undo") {
-            val operation = Operation.getOperator("undo")
-
-            it("should throw InvalidOperationException") {
-                try {
-                    operation.operate(0.0, 0.0)
-                } catch (e : InvalidOperationException) {
-                    e.message `should equal` "Undo operation cannot be performed directly"
-                }
-            }
-
-            it("should have 0 required operand") {
-                operation.requiredOperand `should equal` 0
-            }
-        }
-
-        on("clear") {
-            val operation = Operation.getOperator("clear")
-
-            it("should throw InvalidOperationException") {
-                try {
-                    operation.operate(0.0, 0.0)
-                } catch (e : InvalidOperationException) {
-                    e.message `should equal` "Clear operation cannot be performed directly"
-                }
-            }
-
-            it("should have 0 required operand") {
-                operation.requiredOperand `should equal` 0
             }
         }
     }

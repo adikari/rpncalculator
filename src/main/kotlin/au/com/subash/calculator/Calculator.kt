@@ -1,6 +1,9 @@
 package au.com.subash.calculator
 
 import au.com.subash.calculator.exception.InvalidOperationException
+import au.com.subash.calculator.operation.CLEAR
+import au.com.subash.calculator.operation.OperationFactory
+import au.com.subash.calculator.operation.UNDO
 import java.util.Stack
 
 /**
@@ -12,8 +15,7 @@ class Calculator {
     /**
      * Stack to store operands
      */
-    var operandStack = Stack<Double>()
-        private set
+    val operandStack = Stack<Double>()
 
     /**
      * Stack to restore previous operation
@@ -76,12 +78,10 @@ class Calculator {
      * @param isUndo Flag if its undo operation
      */
     private fun evaluate(symbol: String, isUndo: Boolean) {
-        val operation = Operation.getOperator(symbol)
-
-        when (operation) {
-            Operation.UNDO -> performUndoOperation()
-            Operation.CLEAR -> performClearOperation()
-            else -> performOperation(operation, isUndo)
+        when (symbol) {
+            UNDO -> undo()
+            CLEAR -> clear()
+            else -> performOperation(symbol, isUndo)
         }
     }
 
@@ -93,11 +93,14 @@ class Calculator {
      *
      * @throws InvalidOperationException There are not enough operands to perform operation
      */
-    private fun performOperation(operation : Operation, isUndo: Boolean) {
+    private fun performOperation(symbol: String, isUndo: Boolean) {
+        val operation = OperationFactory.get(symbol)
+
         if (operandStack.isEmpty() || operandStack.size < operation.requiredOperand) {
-            val msg = "operator ${operation.symbol} (position: $index): insufficient parameters"
+            val msg = "operator $symbol (position: $index): insufficient parameters"
             throw InvalidOperationException(msg)
         }
+
 
         val firstOperand = operandStack.pop()
         val secondOperand = if (operation.requiredOperand > 1) operandStack.pop() else 0.0
@@ -112,7 +115,7 @@ class Calculator {
      *
      * @throws InvalidOperationException There is not enough operands for undo operation
      */
-    private fun performUndoOperation() {
+    private fun undo() {
         if (undoStack.isEmpty()) {
             throw InvalidOperationException("Noting to undo!!")
         }
@@ -125,8 +128,9 @@ class Calculator {
 
     /**
      * Clear both undo and operand stack
+     * Its like pressing AC button on calculator
      */
-    private fun performClearOperation() {
+    private fun clear() {
         operandStack.clear()
         undoStack.clear()
     }

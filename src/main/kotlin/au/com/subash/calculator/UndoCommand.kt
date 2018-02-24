@@ -1,6 +1,7 @@
 package au.com.subash.calculator
 
 import au.com.subash.calculator.exception.InvalidOperationException
+import au.com.subash.calculator.operation.base.Operation
 
 /**
  * Undo command. Used to perform undo operation
