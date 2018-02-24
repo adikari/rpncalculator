@@ -21,26 +21,40 @@ class Calculator {
     private val undoStack = Stack<Double>()
 
     /**
-     * Evaluate RPN expression
+     * Perform calculation on RPN expression
      *
      * @param input RPN expression
      */
-    fun evaluate(input : String) {
+    fun calculate(input : String) {
         val expression = input.split(" ")
 
         expression.forEach {
             val operand = it.toDoubleOrNull()
 
-            if (null == operand) parseSymbol(it) else operandStack.push(operand)
+            if (null == operand) evaluate(it) else operandStack.push(operand)
         }
     }
 
     /**
-     * Parse operation symbol and perform operation accordingly
+     * Get result from previous operation
+     *
+     * @return Result of previous operation
+     * @throws InvalidOperationException No operation has been performed
+     */
+    fun getResult(): Double {
+        if (undoStack.isEmpty()) {
+            throw InvalidOperationException("No calculation has been performed!!")
+        }
+
+        return operandStack.peek();
+    }
+
+    /**
+     * Evaluate symbol and perform operation accordingly
      *
      * @param symbol Operation symbol
      */
-    private fun parseSymbol(symbol: String) {
+    private fun evaluate(symbol: String) {
         val operation = Operation.getOperator(symbol)
 
         when (operation) {

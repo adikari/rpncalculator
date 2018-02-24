@@ -19,7 +19,7 @@ fun main(args: Array<String>) {
         }
 
         try {
-            calculator.evaluate(input)
+            calculator.calculate(input)
 
             println("Stack: " + calculator.operandStack.joinToString(", "))
         } catch (e : InvalidOperationException) {
