@@ -60,6 +60,8 @@ class Calculator : Observable() {
     private fun calculate(input : String, isUndo : Boolean) {
         val expression = input.split(" ")
 
+        setChanged()
+
         expression.forEach {
             index ++
             val operand = it.toDoubleOrNull()
@@ -70,8 +72,6 @@ class Calculator : Observable() {
                 if (!isUndo) undoStack.push(null)
             }
         }
-
-        setChanged()
     }
 
     /**

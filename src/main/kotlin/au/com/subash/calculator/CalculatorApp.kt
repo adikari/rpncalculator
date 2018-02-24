@@ -41,11 +41,11 @@ class CalculatorApp(private val calculator : Calculator, private val view : View
 
             try {
                 calculator.calculate(input)
+                calculator.notifyObservers()
             } catch (e : Exception) {
-                view.displayError(e)
+                calculator.notifyObservers(e)
             }
 
-            calculator.notifyObservers()
         }
     }
 

@@ -18,7 +18,11 @@ class ConsoleView : View, Observer {
 
     /* {@inheritDoc} */
     override fun update(o: Observable, arg: Any?) {
-        if (o is Calculator) displayResult(o.operandStack)
+        if (o !is Calculator) return
+
+        if (arg is Exception) displayError(arg)
+
+        displayResult(o.operandStack)
     }
 
     /* {@inheritDoc} */
