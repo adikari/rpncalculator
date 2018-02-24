@@ -81,19 +81,19 @@ class Calculator {
         when (symbol) {
             UNDO -> undo()
             CLEAR -> clear()
-            else -> performOperation(symbol, isUndo)
+            else -> operate(symbol, isUndo)
         }
     }
 
     /**
      * Perform calculate operation
      *
-     * @param operation Operation to perform
+     * @param symbol    Operation to perform
      * @param isUndo    Flag if its undo operation
      *
      * @throws InvalidOperationException There are not enough operands to perform operation
      */
-    private fun performOperation(symbol: String, isUndo: Boolean) {
+    private fun operate(symbol: String, isUndo: Boolean) {
         val operation = OperationFactory.get(symbol)
 
         if (operandStack.isEmpty() || operandStack.size < operation.requiredOperand) {
