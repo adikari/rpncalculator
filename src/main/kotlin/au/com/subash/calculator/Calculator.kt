@@ -46,7 +46,7 @@ class Calculator {
             throw InvalidOperationException("No calculation has been performed!!")
         }
 
-        return operandStack.peek();
+        return operandStack.peek()
     }
 
     /**
