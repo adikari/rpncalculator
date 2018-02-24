@@ -39,13 +39,9 @@ class CalculatorApp(private val calculator : Calculator, private val view : View
                 stop(); continue
             }
 
-            try {
-                calculator.calculate(input)
-                calculator.notifyObservers()
-            } catch (e : Exception) {
-                calculator.notifyObservers(e)
-            }
+            val result = try { calculator.calculate(input) } catch (e : Exception) { e }
 
+            calculator.notifyObservers(result)
         }
     }
 

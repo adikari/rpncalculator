@@ -12,11 +12,6 @@ import java.util.Observable
 class ConsoleView : View, Observer {
 
     /* {@inheritDoc} */
-    override fun dispose() {
-        println("Bye Bye!!")
-    }
-
-    /* {@inheritDoc} */
     override fun update(o: Observable, arg: Any?) {
         if (o !is Calculator) return
 
@@ -41,5 +36,10 @@ class ConsoleView : View, Observer {
     /* {@inheritDoc} */
     override fun displayError(e: Exception) {
         println("Error: ${e.message ?: "Unknown error"}!!")
+    }
+
+    /* {@inheritDoc} */
+    override fun dispose() {
+        println("Bye Bye!!")
     }
 }
