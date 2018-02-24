@@ -1,6 +1,7 @@
 package au.com.subash.calculator.view
 
 import au.com.subash.calculator.Calculator
+import java.text.DecimalFormat
 import java.util.Stack
 import java.util.Observer
 import java.util.Observable
@@ -28,7 +29,9 @@ class ConsoleView : View, Observer {
 
     /* {@inheritDoc} */
     override fun displayResult(stack: Stack<Double>) {
-        println("Stack: " + stack.joinToString(", "))
+        println("Stack: " + stack.joinToString(", ") {
+            DecimalFormat("#.##########").format(it)
+        })
     }
 
     /* {@inheritDoc} */
