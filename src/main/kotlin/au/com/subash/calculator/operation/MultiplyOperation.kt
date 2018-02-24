@@ -2,7 +2,7 @@ package au.com.subash.calculator.operation
 
 import au.com.subash.calculator.operation.base.BinaryOperation
 
-class MultiplyOperation() : BinaryOperation(MULTIPLY, DIVIDE) {
+class MultiplyOperation : BinaryOperation(MULTIPLY, DIVIDE) {
 
     /**
      * Multiplication operation. Multiplication of two operands
