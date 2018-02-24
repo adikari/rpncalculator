@@ -14,8 +14,74 @@ class CalculatorSpec : Spek ({
 
         on ("calculate") {
 
-            // it("")
+            it ("should perform the calculation from RPN expression") {
+                val calculator = Calculator()
 
+                calculator.calculate("5 2")
+
+                calculator.operandStack.toString() `should equal` "[5.0, 2.0]"
+            }
+
+            it ("should perform calculation with sqrt and clear operations") {
+                val calculator = Calculator()
+
+                calculator.calculate("2 sqrt")
+
+                calculator.operandStack.toString() `should equal` "[1.4142135623730951]"
+
+                calculator.calculate("clear 9 sqrt")
+
+                calculator.operandStack.toString() `should equal` "[3.0]"
+            }
+
+            it ("should perform calculation with subtraction and clear operators") {
+                val calculator = Calculator()
+
+                calculator.calculate("5 2 -")
+                calculator.operandStack.toString() `should equal` "[3.0]"
+
+                calculator.calculate("3 -")
+                calculator.operandStack.toString() `should equal` "[0.0]"
+
+                calculator.calculate("clear")
+                calculator.operandStack.toString() `should equal` "[]"
+            }
+
+            it ("should perform calculation with division and multiplication operators") {
+                val calculator = Calculator()
+
+                calculator.calculate("7 12 2 /")
+                calculator.operandStack.toString() `should equal` "[7.0, 6.0]"
+
+                calculator.calculate("*")
+                calculator.operandStack.toString() `should equal` "[42.0]"
+
+                calculator.calculate("4 /")
+                calculator.operandStack.toString() `should equal` "[10.5]"
+            }
+
+            it ("should perform calculation with multiplication operators") {
+                val calculator = Calculator()
+
+                calculator.calculate("1 2 3 4 5")
+                calculator.operandStack.toString() `should equal` "[1.0, 2.0, 3.0, 4.0, 5.0]"
+
+                calculator.calculate("* * * *")
+                calculator.operandStack.toString() `should equal` "[120.0]"
+            }
+
+            it ("should throw exception if not enough operands for operation") {
+                val calculator = Calculator()
+
+                try {
+                    calculator.calculate("1 2 3 * 5 + * * 6 5")
+                    fail("It should throw insufficient operands exception")
+                } catch (e : InvalidOperationException) {
+                    calculator.operandStack.toString() `should equal` "[11.0]"
+
+                    e.message `should equal` "operator * (position: 8): insufficient parameters"
+                }
+            }
         }
 
         on("get result") {

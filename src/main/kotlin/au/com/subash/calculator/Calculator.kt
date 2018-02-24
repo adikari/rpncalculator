@@ -20,6 +20,8 @@ class Calculator {
      */
     private val undoStack = Stack<Double>()
 
+    private var index = 0
+
     /**
      * Perform calculation on RPN expression
      *
@@ -29,6 +31,7 @@ class Calculator {
         val expression = input.split(" ")
 
         expression.forEach {
+            index ++
             val operand = it.toDoubleOrNull()
 
             if (null == operand) evaluate(it) else operandStack.push(operand)
@@ -72,9 +75,8 @@ class Calculator {
      * @throws InvalidOperationException There are not enough operands to perform operation
      */
     private fun performOperation(operation : Operation) {
-
         if (operandStack.isEmpty() || operandStack.size < operation.requiredOperand) {
-            val msg = "${operation.name} (position: ${operandStack.size}): insufficient parameters"
+            val msg = "operator ${operation.symbol} (position: $index): insufficient parameters"
             throw InvalidOperationException(msg)
         }
 
