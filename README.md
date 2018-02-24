@@ -5,9 +5,9 @@ Console based RPN calculator built wit Kotlin.
 ### Getting Started
 
 ```
-git pull https://code.subash.com.au/subash/rpncalculator.git
+git clone https://code.subash.com.au/subash/rpncalculator.git
 cd rpncalculator
-./gradlew run
+./gradlew run -q
 ```
 
 ### Running tests
