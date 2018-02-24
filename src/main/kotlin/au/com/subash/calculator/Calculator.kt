@@ -4,13 +4,13 @@ import au.com.subash.calculator.exception.InvalidOperationException
 import au.com.subash.calculator.operation.CLEAR
 import au.com.subash.calculator.operation.OperationFactory
 import au.com.subash.calculator.operation.UNDO
-import java.util.Stack
+import java.util.*
 
 /**
  * RPN calculator
  * Perform operation using Reverse Polish Notation
  */
-class Calculator {
+class Calculator : Observable() {
 
     /**
      * Stack to store operands
@@ -69,6 +69,8 @@ class Calculator {
                 if (!isUndo) undoStack.push(null)
             }
         }
+
+        setChanged()
     }
 
     /**
@@ -100,7 +102,6 @@ class Calculator {
             val msg = "operator $symbol (position: $index): insufficient parameters"
             throw InvalidOperationException(msg)
         }
-
 
         val firstOperand = operandStack.pop()
         val secondOperand = if (operation.requiredOperand > 1) operandStack.pop() else 0.0
