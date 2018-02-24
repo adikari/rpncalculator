@@ -28,7 +28,7 @@ class ConsoleView : View, Observer {
 
     /* {@inheritDoc} */
     override fun displayResult(stack: Stack<Double>) {
-        println("Stack: " + stack.joinToString(", ") {
+        println("Stack: " + stack.joinToString(" ") {
             DecimalFormat("#.##########").format(it)
         })
     }

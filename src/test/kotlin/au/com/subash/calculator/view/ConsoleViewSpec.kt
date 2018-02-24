@@ -28,7 +28,7 @@ class ConsoleViewSpec : Spek ({
 
                 view.displayResult(stack)
 
-                outContent.toString() `should equal` "Stack: 2, 3\n"
+                outContent.toString() `should equal` "Stack: 2 3\n"
                 outContent.reset()
             }
 
@@ -39,7 +39,7 @@ class ConsoleViewSpec : Spek ({
 
                 view.displayResult(stack)
 
-                outContent.toString() `should equal` "Stack: 2.1111111111, 3.1111111111\n"
+                outContent.toString() `should equal` "Stack: 2.1111111111 3.1111111111\n"
                 outContent.reset()
             }
         }
