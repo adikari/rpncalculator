@@ -20,6 +20,9 @@ class Calculator {
      */
     private val undoStack = Stack<UndoCommand>()
 
+    /**
+     * Position of current operation
+     */
     private var index = 0
 
     /**
@@ -48,7 +51,8 @@ class Calculator {
     /**
      * Perform calculation on RPN expression
      *
-     * @param input RPN expression
+     * @param input  RPN expression
+     * @param isUndo Flag if its undo operation
      */
     private fun calculate(input : String, isUndo : Boolean) {
         val expression = input.split(" ")
@@ -69,6 +73,7 @@ class Calculator {
      * Evaluate symbol and perform operation accordingly
      *
      * @param symbol Operation symbol
+     * @param isUndo Flag if its undo operation
      */
     private fun evaluate(symbol: String, isUndo: Boolean) {
         val operation = Operation.getOperator(symbol)
@@ -84,6 +89,7 @@ class Calculator {
      * Perform calculate operation
      *
      * @param operation Operation to perform
+     * @param isUndo    Flag if its undo operation
      *
      * @throws InvalidOperationException There are not enough operands to perform operation
      */
@@ -98,9 +104,7 @@ class Calculator {
 
         operandStack.push(operation.operate(firstOperand, secondOperand))
 
-        if (!isUndo) {
-            undoStack.push(UndoCommand(operation, firstOperand))
-        }
+        if (!isUndo) undoStack.push(UndoCommand(operation, firstOperand))
     }
 
     /**
@@ -115,7 +119,8 @@ class Calculator {
 
         val undoCommand = undoStack.pop()
 
-        if (null == undoCommand) operandStack.pop() else calculate(undoCommand.getExpression(), true)
+        if (null == undoCommand) operandStack.pop()
+        else calculate(undoCommand.reverseExpression(), true)
     }
 
     /**

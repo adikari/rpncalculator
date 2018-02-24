@@ -86,6 +86,17 @@ class CalculatorSpec : Spek ({
                 calculator.operandStack.toString() `should equal` "[20.0, 5.0]"
             }
 
+            it ("should throw InvalidOperationException if undo operation performed with no operands") {
+                val calculator = Calculator()
+
+                try {
+                    calculator.calculate("undo")
+                    fail("Should throw InvalidOperationException")
+                } catch (e : InvalidOperationException) {
+                    e.message `should equal` "Noting to undo!!"
+                }
+            }
+
             it ("should throw exception if not enough operands for operation") {
                 val calculator = Calculator()
 
