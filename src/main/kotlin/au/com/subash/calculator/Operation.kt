@@ -1,6 +1,7 @@
 package au.com.subash.calculator
 
 import au.com.subash.calculator.exception.InvalidOperationException
+import java.lang.Math.pow
 import java.util.HashMap
 import kotlin.math.sqrt
 
@@ -12,9 +13,9 @@ import kotlin.math.sqrt
  *
  * @constructor Default constructor
  */
-enum class Operation(val symbol : String, val requiredOperand : Int) {
+enum class Operation(val symbol : String, val requiredOperand : Int, val opposite : String) {
 
-    ADD("+", 2) {
+    ADD("+", 2, "-") {
 
         /**
          * Addition operation. Add secondOperand with firstOperand
@@ -27,7 +28,7 @@ enum class Operation(val symbol : String, val requiredOperand : Int) {
                 = secondOperand + firstOperand
     },
 
-    SUBTRACT("-", 2) {
+    SUBTRACT("-", 2, "+") {
 
         /**
          * Subtraction operation. Subtract first operand from second operand
@@ -40,7 +41,7 @@ enum class Operation(val symbol : String, val requiredOperand : Int) {
                 = secondOperand - firstOperand
     },
 
-    DIVIDE("/", 2) {
+    DIVIDE("/", 2, "*") {
 
         /**
          * Division operation. Divide second operand by first operand
@@ -60,7 +61,7 @@ enum class Operation(val symbol : String, val requiredOperand : Int) {
         }
     },
 
-    MULTIPLY("*", 2) {
+    MULTIPLY("*", 2, "/") {
 
         /**
          * Multiplication operation. Multiplication of two operands
@@ -73,7 +74,7 @@ enum class Operation(val symbol : String, val requiredOperand : Int) {
                 secondOperand * firstOperand
     },
 
-    SQUARE_ROOT("sqrt", 1) {
+    SQUARE_ROOT("sqrt", 1, "pow") {
 
         /**
          * Square root operation. Perform square root of first operand
@@ -87,7 +88,21 @@ enum class Operation(val symbol : String, val requiredOperand : Int) {
                 sqrt(firstOperand)
     },
 
-    UNDO("undo", 0) {
+    POWER("pow", 1, "sqrt") {
+
+        /**
+         * Square operation. Perform square of first operand
+         * Second operand is ignored
+         *
+         * @return Result of square of first operand
+         *
+         * {@inheritDoc}
+         */
+        override fun operate(firstOperand: Double, secondOperand: Double): Double =
+                pow(firstOperand, 2.0)
+    },
+
+    UNDO("undo", 0, "") {
 
         /**
          * Undo operation. Undo the last operation.
@@ -99,7 +114,7 @@ enum class Operation(val symbol : String, val requiredOperand : Int) {
                 throw InvalidOperationException("Undo operation cannot be performed directly")
     },
 
-    CLEAR("clear", 0) {
+    CLEAR("clear", 0, "") {
 
         /**
          * Clear operation. Clear the stack

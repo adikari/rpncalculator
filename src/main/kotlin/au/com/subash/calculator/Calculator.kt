@@ -18,7 +18,7 @@ class Calculator {
     /**
      * Stack to restore previous operation
      */
-    private val undoStack = Stack<Double>()
+    private val undoStack = Stack<UndoCommand>()
 
     private var index = 0
 
@@ -28,14 +28,7 @@ class Calculator {
      * @param input RPN expression
      */
     fun calculate(input : String) {
-        val expression = input.split(" ")
-
-        expression.forEach {
-            index ++
-            val operand = it.toDoubleOrNull()
-
-            if (null == operand) evaluate(it) else operandStack.push(operand)
-        }
+        calculate(input, false)
     }
 
     /**
@@ -53,17 +46,37 @@ class Calculator {
     }
 
     /**
+     * Perform calculation on RPN expression
+     *
+     * @param input RPN expression
+     */
+    private fun calculate(input : String, isUndo : Boolean) {
+        val expression = input.split(" ")
+
+        expression.forEach {
+            index ++
+            val operand = it.toDoubleOrNull()
+
+            if (null == operand) evaluate(it, isUndo)
+            else {
+                operandStack.push(operand)
+                if (!isUndo) undoStack.push(null)
+            }
+        }
+    }
+
+    /**
      * Evaluate symbol and perform operation accordingly
      *
      * @param symbol Operation symbol
      */
-    private fun evaluate(symbol: String) {
+    private fun evaluate(symbol: String, isUndo: Boolean) {
         val operation = Operation.getOperator(symbol)
 
         when (operation) {
             Operation.UNDO -> performUndoOperation()
             Operation.CLEAR -> performClearOperation()
-            else -> performOperation(operation)
+            else -> performOperation(operation, isUndo)
         }
     }
 
@@ -74,7 +87,7 @@ class Calculator {
      *
      * @throws InvalidOperationException There are not enough operands to perform operation
      */
-    private fun performOperation(operation : Operation) {
+    private fun performOperation(operation : Operation, isUndo: Boolean) {
         if (operandStack.isEmpty() || operandStack.size < operation.requiredOperand) {
             val msg = "operator ${operation.symbol} (position: $index): insufficient parameters"
             throw InvalidOperationException(msg)
@@ -85,8 +98,9 @@ class Calculator {
 
         operandStack.push(operation.operate(firstOperand, secondOperand))
 
-        undoStack.push(firstOperand)
-        undoStack.push(secondOperand)
+        if (!isUndo) {
+            undoStack.push(UndoCommand(operation, firstOperand))
+        }
     }
 
     /**
@@ -95,13 +109,13 @@ class Calculator {
      * @throws InvalidOperationException There is not enough operands for undo operation
      */
     private fun performUndoOperation() {
-        if (undoStack.size < 2) {
+        if (undoStack.isEmpty()) {
             throw InvalidOperationException("Noting to undo!!")
         }
 
-        operandStack.pop()
-        operandStack.push(undoStack.pop())
-        operandStack.push(undoStack.pop())
+        val undoCommand = undoStack.pop()
+
+        if (null == undoCommand) operandStack.pop() else calculate(undoCommand.getExpression(), true)
     }
 
     /**
